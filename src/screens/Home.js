@@ -1,5 +1,4 @@
-import { StyleSheet, Text, View, FlatList, TextInput, StatusBar, Image, Animated, TouchableOpacity,    Dimensions
-
+import { StyleSheet, Text, View, FlatList, TextInput, StatusBar, Image, Animated, TouchableOpacity, Dimensions
 } from 'react-native'
 import React,{useState} from 'react'
 import {COLORS, FONTS, SIZES, PADDING} from '../constant/constant'
@@ -13,6 +12,7 @@ import  language from '../../assets/images/language.png'
 import  watched from '../../assets/images/watched.png'
 import {DATA} from '../../assets/mock/Dummy'
 import {useNavigation} from '@react-navigation/native'
+import mic from '../../assets/images/mic.png'
 
 
 
@@ -101,24 +101,15 @@ const Home = () => {
         onChangeText={(text) => setSearch(text)}
         value={search}
       />
-      <View 
-        style={{ flexDirection: 'row',
-                  alignItems: 'center',
-                  position: 'absolute',
-                  right : 16,
-                  justifyContent: 'space-between'
-                  }}>
-        <View style={{
-         borderWidth : 1,
-          borderColor : COLORS.stext,
-          height : 30,
-          marginRight : 16,
-          paddingVertical : 11,
-          opacity : 0.3
-        }} />        
-        <FontAwesome name="microphone" size={SIZES.xxl} color={COLORS.stext} 
-            style={{paddingVertical:14, opacity : 0.3}} />
-      </View>
+      <TouchableOpacity style={{
+        position: 'absolute',
+        right : 16,
+      }}>
+        <Image source={mic} style={{
+          width:40,
+          height:30,
+        }} />
+      </TouchableOpacity>
     </View>
   )
   }

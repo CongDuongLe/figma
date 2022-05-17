@@ -3,6 +3,7 @@ import React from 'react'
 import {COLORS, FONTS, SIZES, PADDING} from '../constant/constant'
 import { useNavigation } from '@react-navigation/native'
 import AntDesign from 'react-native-vector-icons/AntDesign';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 import play from '../../assets/images/play.png'
 import background from '../../assets/images/details.png'
 import rating from '../../assets/images/rating.png'
@@ -17,22 +18,6 @@ const Detail = () => {
   // create animation
   const scrollX = new Animated.Value(0);
   let position = Animated.divide(scrollX, width);
-  // create array of image
-  const images = [
-    {
-      id: 1,
-      image: 'https://images.unsplash.com/photo-1518791841217-8f162f1e1131?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1050&q=80',
-    },
-    {
-      id: 2,
-      image: 'https://images.unsplash.com/photo-1518791841217-8f162f1e1131?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1050&q=80', 
-    },
-    {
-      id: 3,
-      image: 'https://images.unsplash.com/photo-1518791841217-8f162f1e1131?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1050&q=80',
-    }
-  ]
-  // create array of text
 
   // headerTop
   const HeaderTop = () => {
@@ -50,7 +35,7 @@ const Detail = () => {
           style={[styles.buttonHeader, { 
             left : 68
           }]}>
-          <AntDesign name="left" size={SIZES.lg} color={COLORS.ptext} />
+          <Ionicons name="arrow-back-sharp" size={SIZES.xl} color={COLORS.ptext} />
         </TouchableOpacity>
         <TouchableOpacity 
           onPress={() => navigation.navigate('Watched')}
