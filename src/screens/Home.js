@@ -1,6 +1,6 @@
-import { StyleSheet, Text, View, FlatList, TextInput, StatusBar, Image, Animated, TouchableOpacity, Dimensions
+import { StyleSheet, Text, View, FlatList, TextInput, StatusBar, Image, Animated, TouchableOpacity, Dimensions,ScrollView, Platform
 } from 'react-native'
-import React,{useState} from 'react'
+import React,{useState, useRef} from 'react'
 import {COLORS, FONTS, SIZES, PADDING} from '../constant/constant'
 import AntDesign  from 'react-native-vector-icons/AntDesign';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
@@ -13,15 +13,15 @@ import  watched from '../../assets/images/watched.png'
 import {DATA} from '../../assets/mock/Dummy'
 import {useNavigation} from '@react-navigation/native'
 import mic from '../../assets/images/mic.png'
+import Carousel from 'react-native-snap-carousel';
 
-
+const { width, height } = Dimensions.get('window');
+const ITEM_SIZE = Platform.OS === 'ios' ? width * 0.2 : width * 0.4;
 
 const Home = () => {
     const [search, setSearch] = useState('');
-    const width = Dimensions.get('window').width;
-    const height = Dimensions.get('window').height;
-    const scrollX = new Animated.Value(0);
-    let position = Animated.divide(scrollX, width);
+  const scrollX = useRef(new Animated.Value(0)).current;
+    
 
     // useNavigation
     const navigation = useNavigation();
@@ -155,24 +155,34 @@ const Home = () => {
     )
   }
   // renderItem flatlist
-  const renderItem = ({item}) => { 
+  const renderItem = ({item, index}) => { 
+    const inputRange = [
+      (index - 1) * ITEM_SIZE,
+      (index - 0.8) * ITEM_SIZE,
+      index * ITEM_SIZE,
+    ];
+
+    const translateY = scrollX.interpolate({
+      inputRange,
+      outputRange: [5, 15, 5],
+      extrapolate: 'extend',
+    });
     return (
       // Touch to navigate to detail by id
-      <TouchableOpacity 
-        onPress={() => navigation.navigate('Detail', {id: item.id})}
-        activeOpacity={0.8}
+      <Animated.View
         style={{
-          marginTop : SIZES.xxxl,
-          marginLeft: 28,
-      }}>
-        <Image 
-          source={item.image} 
-          style={{ 
-            resizeMode: 'contain',
-          }}
+          transform: [{ translateY }],
+          marginHorizontal: SIZES.sm,
+        }}>
+        <TouchableOpacity
+          onPress={() => navigation.navigate('Detail', { id: item.id })}>
+          <Image
+            source={item.image}
+            style={{ width: 210, height: 310 }}
           />
-      </TouchableOpacity>
-    )
+        </TouchableOpacity>
+      </Animated.View>
+    );
   }
 
   return (
@@ -185,18 +195,20 @@ const Home = () => {
       </View>
       <View style={styles.footer}>
         {/* Animated Flatlist Rotated Z 5 dregree */}
-        <FlatList
+        <Animated.FlatList
           data={DATA}
           keyExtractor={(item, index) => index.toString()}
           renderItem={renderItem}
           horizontal
           showsHorizontalScrollIndicator={false}
           bounces={false}
-          decelerationRate={0.8}
-          snapToInterval={width}
+          contentContainerStyle={{ alignItems: 'center' }}
+          decelerationRate={Platform.OS === 'ios' ? 0 : 0.98}
+          renderToHardwareTextureAndroid
+          snapToAlignment="center"
           onScroll={Animated.event(
-            [{nativeEvent: {contentOffset: {x: scrollX}}}],
-            {useNativeDriver: false},
+            [{ nativeEvent: { contentOffset: { x: scrollX } } }],
+            { useNativeDriver: false }
           )}
         />
       </View>

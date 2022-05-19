@@ -17,7 +17,7 @@ const FilterButton = ({ name, source }) => {
             justifyContent: 'space-between',
         }}>
             {/* Icon or image */}
-            <View style={{
+            <TouchableOpacity style={{
                 height: 52,
                 width: 52,
                 borderRadius: 16,
@@ -26,7 +26,7 @@ const FilterButton = ({ name, source }) => {
                 alignItems: 'center',
             }}>
                 <Image source={source} />
-            </View>
+            </TouchableOpacity>
             {/* Text */}
             <View style={{
                 marginTop: 4

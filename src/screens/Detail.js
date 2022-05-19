@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, ImageBackground, Dimensions , Animated, TouchableOpacity, Image, FlatList ,StatusBar} from 'react-native'
+import { StyleSheet, Text, View, ImageBackground, Dimensions , Animated, TouchableOpacity, Image, FlatList ,StatusBar, ScrollView} from 'react-native'
 import React from 'react'
 import {COLORS, FONTS, SIZES, PADDING} from '../constant/constant'
 import { useNavigation } from '@react-navigation/native'
