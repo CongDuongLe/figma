@@ -14,165 +14,44 @@ import {DATA} from '../../assets/mock/Dummy'
 import {useNavigation} from '@react-navigation/native'
 import mic from '../../assets/images/mic.png'
 import Carousel from 'react-native-snap-carousel';
+import HeaderTop from '../components/home/HeaderTop'
+import HeaderCenter from '../components/home/HeaderCenter';
+import HeaderBottom from '../components/home/HeaderBottom';
+
+
+
 
 const { width, height } = Dimensions.get('window');
-const ITEM_SIZE = Platform.OS === 'ios' ? width * 0.2 : width * 0.4;
+const ITEM_SIZE = Platform.OS === 'ios' ? width * 0.2 : width * 0.6;
+
+const MARGIN_HORZONTAL = width * 0.2 - 32;
 
 const Home = () => {
     const [search, setSearch] = useState('');
-  const scrollX = useRef(new Animated.Value(0)).current;
-    
-
+    const scrollX = useRef(new Animated.Value(0)).current;
     // useNavigation
     const navigation = useNavigation();
 
-  // header top
-  const HeaderTop = () => {
-    return (
-      <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-        {/* Text */}
-        <View>
-            {/* Hello Daizy! */}
-        <View style={{ flexDirection: 'row', alignItems: 'center'}}>
-          <Text 
-            style={{
-              fontFamily: FONTS.medium,
-              color: COLORS.ptext,
-              fontSize: SIZES.xxl,
-              lineHeight : SIZES.xxxl,
-              marginRight : 6
-          }}>Hello</Text>
-          <Text
-            style={{
-              fontFamily: FONTS.light,
-              color: COLORS.ptext,
-              lineHeight : SIZES.xxxl,
-              fontSize: SIZES.xxl
-            }}
-            >Daizy!</Text>
-        </View>
-        {/* Cheking last app */}
-        <Text style={{
-          fontFamily: FONTS.medium,
-          color: COLORS.stext,
-          lineHeight: 21,
-          fontSize: SIZES.lg
-        }}> Check for lastest addition.</Text>
-        </View>
-        {/* Avatar */}
-        <View style={{ alignItems: 'center' }}>
-          <Image source={avatar} style={{ width: 53, height: 53, borderRadius : 50}} />
-        </View>
-    </View>
-    )
-  }
-  // header center
-  const HeaderCenter = () => {
-  return (
-    <View style={{
-      flexDirection: 'row',
-      marginTop : SIZES.xxxl,
-      justifyContent: 'space-between',
-      alignItems: 'center'
-    }}>
-       <AntDesign name="search1" size={SIZES.xxl} color={COLORS.ptext}
-          style ={{ 
-            position: 'absolute',
-            left : 16,
-            paddingVertical: SIZES.lg,
-          }}
-       />
-      <TextInput
-        placeholder="Search"
-        placeholderTextColor={COLORS.stext}
-        style={{
-          fontFamily: FONTS.medium,
-          lineHeight :21,
-          flex :1,
-          borderWidth : 1,
-          borderColor : COLORS.stext,
-          borderRadius: 16,
-          backgroundColor : "rgba(118, 118, 128, 0.12)",
-          fontSize: SIZES.lg,
-          alignContent: 'center',
-          color: COLORS.stext,
-          paddingHorizontal: 56,
-        }}
-        onChangeText={(text) => setSearch(text)}
-        value={search}
-      />
-      <TouchableOpacity style={{
-        position: 'absolute',
-        right : 16,
-      }}>
-        <Image source={mic} style={{
-          width:40,
-          height:30,
-        }} />
-      </TouchableOpacity>
-    </View>
-  )
-  }
-  // header bottom
-  const HeaderBottom = () => { 
-    return(
-      <View style={{
-        marginTop : SIZES.xxxl,
-      }}>
-        <Text style={{
-          fontFamily: FONTS.medium,
-          color: COLORS.ptext,
-          fontSize: SIZES.xl,
-          lineHeight: 27
-         }}>Filters</Text>
-         <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-            <FilterButton name = 'Gerne' source ={genre} />
-            <FilterButton name = 'Top IMDB' source ={star}/>
-            <FilterButton name = 'Language' source ={language} />
-            <FilterButton name = 'Watched' source ={watched}/>
-         </View>
-         <View style ={{
-            marginTop : SIZES.xxxl,
-         }}>
-           <View style={{
-              flexDirection: 'row',
-           }}>
-             <Text style={{
-                fontFamily: FONTS.medium,
-                color: COLORS.ptext,
-                fontSize: SIZES.xxl,
-                lineHeight:SIZES.xxxl,
-             }}>Feature </Text>
-             <Text style={{
-                fontFamily: FONTS.light,
-                color: COLORS.ptext,
-                fontSize: SIZES.xxl,
-                lineHeight:SIZES.xxxl,
-                }}>Series</Text>
-           </View>
-         </View>
-      </View>
-    )
-  }
+
   // renderItem flatlist
   const renderItem = ({item, index}) => { 
     const inputRange = [
       (index - 1) * ITEM_SIZE,
-      (index - 0.8) * ITEM_SIZE,
-      index * ITEM_SIZE,
+      (index - 0) * ITEM_SIZE,
+      (index + 1) * ITEM_SIZE,
     ];
 
     const translateY = scrollX.interpolate({
       inputRange,
-      outputRange: [5, 15, 5],
-      extrapolate: 'extend',
+      outputRange: [15, 5, 15],
+      extrapolate: 'clamp',
     });
     return (
       // Touch to navigate to detail by id
-      <Animated.View
+      <View
         style={{
-          transform: [{ translateY }],
-          marginHorizontal: SIZES.sm,
+          marginHorizontal: 16,
+          marginTop: 28,
         }}>
         <TouchableOpacity
           onPress={() => navigation.navigate('Detail', { id: item.id })}>
@@ -181,37 +60,64 @@ const Home = () => {
             style={{ width: 210, height: 310 }}
           />
         </TouchableOpacity>
-      </Animated.View>
+      </View>
     );
   }
 
   return (
     <View style={styles.container}>
-      <StatusBar barStyle="light-content" hidden={false} translucent={true} backgroundColor={'transparent'} />
-      <View style={styles.header}>
-        <HeaderTop />
-        <HeaderCenter />
-        <HeaderBottom />
-      </View>
-      <View style={styles.footer}>
-        {/* Animated Flatlist Rotated Z 5 dregree */}
-        <Animated.FlatList
+      <ScrollView 
+        showsVerticalScrollIndicator={false}
+        scrollEventThrottle={16}
+        overScrollMode="never"
+       >
+        <StatusBar barStyle="light-content" hidden={false} translucent={true} backgroundColor={'transparent'} />
+        <View style={styles.header}>
+          {/* HeaderTop */}
+          <HeaderTop />
+          {/* <HeaderCenter /> */}
+          <HeaderCenter />
+          {/* {HeaderCenter()} */}
+          {/* {HeaderBottom()} */}
+          {/* <HeaderBottom /> */}
+          <HeaderBottom/>
+          {/* <HeaderBottom/> */}
+        </View>
+        <View style={styles.footer}>
+          {/* Animated Flatlist Rotated Z 5 dregree */}
+          {/* <Animated.FlatList
           data={DATA}
           keyExtractor={(item, index) => index.toString()}
           renderItem={renderItem}
           horizontal
           showsHorizontalScrollIndicator={false}
           bounces={false}
+          scrollEventThrottle={16}
           contentContainerStyle={{ alignItems: 'center' }}
           decelerationRate={Platform.OS === 'ios' ? 0 : 0.98}
           renderToHardwareTextureAndroid
-          snapToAlignment="center"
+          snapToInterval={ITEM_SIZE}
+          // snapToAlignment="center"
           onScroll={Animated.event(
             [{ nativeEvent: { contentOffset: { x: scrollX } } }],
-            { useNativeDriver: false }
+            { useNativeDriver: true }
           )}
-        />
-      </View>
+        /> */}
+          {/* Carousel */}
+          <Carousel
+            data={DATA}
+            renderItem={renderItem}
+            sliderWidth={width}
+            itemWidth={ITEM_SIZE}
+            onSnapToItem={index => setSearch(DATA[index].title)}
+            layout={'default'}
+            loop={true}
+            enableMomentum={true}
+            activeSlideOffset={0}
+          />
+
+        </View>
+      </ScrollView>
     </View>
   )
 }
@@ -223,10 +129,11 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: COLORS.primary,
+    paddingBottom : 60,
     opacity: 0.98
   },
   header: { 
-    flex : 1,
+    // flex : 1,
     paddingHorizontal: PADDING.ph,
     paddingTop: PADDING.pv,
   },

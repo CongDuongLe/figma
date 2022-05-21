@@ -1,20 +1,20 @@
-import { StyleSheet, Text, View, ImageBackground, Dimensions , Animated, TouchableOpacity, Image, FlatList ,StatusBar, ScrollView} from 'react-native'
+import { StyleSheet, Text, View, Dimensions , Animated, TouchableOpacity, Image, FlatList ,StatusBar, ScrollView} from 'react-native'
 import React from 'react'
 import {COLORS, FONTS, SIZES, PADDING} from '../constant/constant'
 import { useNavigation } from '@react-navigation/native'
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import play from '../../assets/images/play.png'
-import background from '../../assets/images/details.png'
+import background from '../../assets/images/detail.png'
 import rating from '../../assets/images/rating.png'
 import {DATA, DATA_DETAIL} from '../../assets/mock/Dummy'
 
+const width = Dimensions.get('screen').width;
+const height = Dimensions.get('window').height;
 
 const Detail = () => {
   const navigation = useNavigation();
   // get dimension of screen 
-  const width = Dimensions.get('screen').width;
-  const height = Dimensions.get('window').height;
   // create animation
   const scrollX = new Animated.Value(0);
   let position = Animated.divide(scrollX, width);
@@ -26,14 +26,14 @@ const Detail = () => {
         style={{ 
           flexDirection: 'row',
           justifyContent: 'space-between',
-          position: 'absolute',
-          top: 62,
+          top: 68,
+          zIndex: 100,
+          paddingHorizontal: PADDING.ph,
           }}>
         <TouchableOpacity 
           onPress={() => navigation.goBack()}
           activeOpacity={0.8}  
           style={[styles.buttonHeader, { 
-            left : 68
           }]}>
           <Ionicons name="arrow-back-sharp" size={SIZES.xl} color={COLORS.ptext} />
         </TouchableOpacity>
@@ -41,7 +41,6 @@ const Detail = () => {
           onPress={() => navigation.navigate('Watched')}
           activeOpacity={0.8}  
           style={[styles.buttonHeader, {
-            left : 360
           }]}>
           <AntDesign name="heart" size={SIZES.lg} color={COLORS.ptext} />
         </TouchableOpacity>
@@ -52,60 +51,78 @@ const Detail = () => {
   const HeaderCenter = () => { 
     return (
       <View style={{
-        position: 'relative',
       }}>
         <TouchableOpacity
           activeOpacity={0.8}
           style={{
-            top: 285,
-            left: 205,
-            position: 'absolute',
-          }}
-        >
-          <Image source={play} />
-        </TouchableOpacity>
-        <View style={{
-          justifyContent: 'center',
-          alignItems: 'center',
-          marginTop: '72%',
-          position: 'absolute',
-          left: '20%',
-
-        }}>
-          <Text style={{
-            fontFamily: FONTS.semibold,
-            color: COLORS.ptext,
-            fontSize: SIZES.xxl,
-            lineHeight: SIZES.xxxl,
-            marginBottom: SIZES.lg,
-          }}>Money Heist: Part 5</Text>
-          <View 
-            style={{flexDirection: 'row'}}>
-              <Text style={styles.centerText}> 2021 | </Text>
-              <Text style={styles.centerText}> Action, Crime, Drama | </Text>
-              <Text style={styles.centerText}> Episode- 8 </Text>
-          </View>
-          <View style={{
-            marginTop : 8
+            top: 265,
+            left: width/2-20,
+            zIndex: 100,
           }}>
-            <Image source={rating} />
-          </View>
-        </View>
+          <Image source={play} style={{
+            width: 54,
+            height: 54,
+          }} />
+        </TouchableOpacity>
       </View>
     )
   }
-  // renderItem
-  const renderItem = ({item}) => { 
+  // headerBottom
+  const HeaderBottom = () => {
     return (
       <View style={{
-       marginTop : 8
+        zIndex: 100,
+        justifyContent: 'center',
+        alignItems: 'center',
+        top: height/2-90,
+      }}>
+        <Text style={{
+          fontFamily: FONTS.semibold,
+          fontSize: SIZES.xxl,
+          color: COLORS.ptext,
+          lineHeight: SIZES.xxxl,
+        }}>  Money Heist : Part 5</Text>
+          <Text style={{
+            fontFamily: FONTS.medium,
+            fontSize: SIZES.lg,
+            color: COLORS.stext,
+            lineHeight: SIZES.xl,
+            marginTop: 8,
+          }}>
+            2021 | Action, Crime, Drama | Episode - 8
+          </Text>
+        <TouchableOpacity
+          activeOpacity={0.8}
+          style={{
+            zIndex: 100,
+            marginTop : 8
+          }}>
+          <Image source={rating} style={{
+            width: 144,
+            height: 24,
+          }} />
+        </TouchableOpacity>
+        </View>
+      )
+    }
+
+ 
+  
+  // renderItem
+  const renderItem = ({item, index}) => { 
+    return (
+      <View style={{
+       marginTop : SIZES.sm,
       }}>
         <TouchableOpacity style={{ 
           width: 110,
-          marginHorizontal: 16,   
+          marginHorizontal: index===1 ? 32 : 0,   
           alignItems: 'center', 
+          borderRadius: 16,
+          borderWidth:1,
+          elevation: 5
         }}>
-          <Image source={item.image} />
+          <Image source={item.image} resizeMode='cover' />
           <Text 
             style={{
               fontFamily: FONTS.medium,
@@ -133,51 +150,63 @@ const Detail = () => {
 
 
   return (
-    <View style={styles.container}>
-      <StatusBar  barStyle="light-content" translucent={true} backgroundColor={'transparent'}/>
-        <ImageBackground source={background} style={styles.background}>
-          <View style={{flex : 3}}>
-            <HeaderTop/>
-            <HeaderCenter/>
-          </View>
-          <View style={{flex : 2, paddingLeft : PADDING.tab , position : 'absolute', top :'60%', marginTop: -10}}>
+    <ScrollView style={styles.container}>
+        <StatusBar barStyle="light-content" translucent={true} backgroundColor={'transparent'} />
+        {/* header */}
+        <View>
+        <View style={{
+          width: width,
+          height: height,
+          position: 'relative',
+          backgroundColor: COLORS.bg,
+        }}>
+          <Image source={background} style={styles.background} />
+          <HeaderTop />
+          <HeaderCenter />
+          <HeaderBottom />
+        </View> 
+        {/* Film info */}
+        <View 
+          style={{ 
+            paddingLeft: PADDING.ph ,
+            marginTop: -height/3,
+            paddingBottom: PADDING.tab,
+            }}>
+          <Text style={{
+            fontFamily: FONTS.medium,
+            color: COLORS.ptext,
+            fontSize: SIZES.xl,
+            lineHeight: 27,
+          }}>Episodes </Text>
+          <FlatList
+            horizontal={true}
+            showsHorizontalScrollIndicator={false}
+            keyExtractor={(item, index) => item.id}
+            data={DATA_DETAIL}
+            renderItem={renderItem}
+          />
+          <View style={{
+            marginTop: 28,
+          }}>
             <Text style={{
               fontFamily: FONTS.medium,
               color: COLORS.ptext,
-              fontSize: SIZES.xl,
-              lineHeight: 27,
-              marginLeft : "4%"
-             }}>Episodes </Text>
-            <FlatList 
-              horizontal={true}
-              showsHorizontalScrollIndicator={false}
-              keyExtractor={(item) => item.id}
-              data = {DATA_DETAIL}
-              renderItem={renderItem}
-            />
-            {/* Plot */}
-            <View style={{
-              marginLeft : "4%",
-              marginTop : 28,
+              fontSize: SIZES.xxl,
+              lineHeight: SIZES.xxxl,
+            }}>Plot</Text>
+            <Text style={{
+              fontFamily: FONTS.medium,
+              color: COLORS.stext,
+              fontSize: SIZES.lg,
+              lineHeight: 21
             }}>
-              <Text style={{
-                fontFamily: FONTS.medium,
-                color: COLORS.ptext,
-                fontSize: SIZES.xxl,
-                lineHeight: SIZES.xxxl,
-              }}>Plot</Text>
-              <Text style={{
-                fontFamily: FONTS.medium,
-                color: COLORS.stext,
-                fontSize: SIZES.lg,
-                lineHeight: 21
-              }}>
               Eight thieves take hostages and lock themselves in the Royal Mint of Spain as a criminal mastermind manipulates the police to carry out his plan.
-              </Text>
-            </View>
-          </View>
-        </ImageBackground>
-    </View>
+            </Text>
+          </View> 
+        </View>
+        
+        </View>
+      </ScrollView>
   )
 }
 
@@ -185,15 +214,15 @@ export default Detail
 
 const styles = StyleSheet.create({
   container: { 
-    flex: 1,
     backgroundColor: COLORS.primary,
+    opacity: 0.98,
   },
   background: { 
-    width: '110%',
-    height: '100%',
-    marginLeft: '-9%',
-    resizeMode: 'contain',
-    marginTop: -10
+    width: width,
+    height: height*1.15,
+    resizeMode: 'cover',
+    marginTop: -height*0.08,
+    position: 'absolute',
   },
   buttonHeader : {
     height: SIZES.xxxl,
@@ -202,7 +231,6 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(255, 255, 255, 0.4)',
     alignItems: 'center',
     justifyContent: 'center',
-    position: 'absolute',
   },
   centerText :{
     fontFamily: FONTS.medium,

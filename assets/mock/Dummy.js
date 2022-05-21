@@ -1,4 +1,3 @@
-// import lucifer from "../images/lucifer.jpg";
 
 export const DATA = [
     {
@@ -12,7 +11,15 @@ export const DATA = [
     {
         id : 3,
         image : require('../images/sexeducation.png'),
-    }
+    },
+    {
+        id : 5,
+        image : require('../images/lucifer.png'),
+    },
+    {
+        id : 4,
+        image : require('../images/sexeducation.png'),
+    },
 ]
    
 export const DATA_DETAIL = [
