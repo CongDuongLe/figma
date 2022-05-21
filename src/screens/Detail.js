@@ -1,5 +1,5 @@
 import { StyleSheet, Text, View, Dimensions , Animated, TouchableOpacity, Image, FlatList ,StatusBar, ScrollView} from 'react-native'
-import React from 'react'
+import React,{useLayoutEffect} from 'react'
 import {COLORS, FONTS, SIZES, PADDING} from '../constant/constant'
 import { useNavigation } from '@react-navigation/native'
 import AntDesign from 'react-native-vector-icons/AntDesign';
@@ -8,6 +8,7 @@ import play from '../../assets/images/play.png'
 import background from '../../assets/images/detail.png'
 import rating from '../../assets/images/rating.png'
 import {DATA, DATA_DETAIL} from '../../assets/mock/Dummy'
+import HeaderTop from '../components/detail/HeaderTop';
 
 const width = Dimensions.get('screen').width;
 const height = Dimensions.get('window').height;
@@ -19,44 +20,53 @@ const Detail = () => {
   const scrollX = new Animated.Value(0);
   let position = Animated.divide(scrollX, width);
 
-  // headerTop
-  const HeaderTop = () => {
-    return (
-      <View 
-        style={{ 
-          flexDirection: 'row',
-          justifyContent: 'space-between',
-          top: 68,
-          zIndex: 100,
-          paddingHorizontal: PADDING.ph,
-          }}>
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      //hide tiltle bar
+      headerTitle: '',
+      headerStyle: {
+        elevation: 5,
+      },   
+      headerTransparent: true,
+      // left button
+      headerLeft: () => (
         <TouchableOpacity 
-          onPress={() => navigation.goBack()}
-          activeOpacity={0.8}  
-          style={[styles.buttonHeader, { 
-          }]}>
-          <Ionicons name="arrow-back-sharp" size={SIZES.xl} color={COLORS.ptext} />
-        </TouchableOpacity>
+        onPress={() => navigation.goBack()}
+        activeOpacity={0.8}  
+        style={[styles.buttonHeader, { 
+          marginLeft: PADDING.nav,
+        }]}>
+        <Ionicons name="arrow-back-sharp" size={SIZES.xl} color={COLORS.ptext} />
+      </TouchableOpacity>
+      ),
+      // right button
+      headerRight: () => (
         <TouchableOpacity 
-          onPress={() => navigation.navigate('Watched')}
-          activeOpacity={0.8}  
-          style={[styles.buttonHeader, {
-          }]}>
-          <AntDesign name="heart" size={SIZES.lg} color={COLORS.ptext} />
-        </TouchableOpacity>
-      </View>
-    )
-  }
+        onPress={() => navigation.navigate('Watched')}
+        activeOpacity={0.8}  
+        style={[styles.buttonHeader, {
+          marginRight: PADDING.nav,
+        }]}>
+        <AntDesign name="heart" size={SIZES.lg} color={COLORS.ptext} />
+      </TouchableOpacity>
+      ),
+
+
+    });
+  }, [navigation]);
+
+
   // headerCenter
   const HeaderCenter = () => { 
     return (
       <View style={{
+        alignItems: 'center',
+        justifyContent: 'center',
       }}>
         <TouchableOpacity
           activeOpacity={0.8}
           style={{
-            top: 265,
-            left: width/2-20,
+            top: (height/5)*2,
             zIndex: 100,
           }}>
           <Image source={play} style={{
@@ -74,7 +84,7 @@ const Detail = () => {
         zIndex: 100,
         justifyContent: 'center',
         alignItems: 'center',
-        top: height/2-90,
+        top: (height/5)*2+20,
       }}>
         <Text style={{
           fontFamily: FONTS.semibold,
@@ -106,8 +116,6 @@ const Detail = () => {
       )
     }
 
- 
-  
   // renderItem
   const renderItem = ({item, index}) => { 
     return (
@@ -161,7 +169,7 @@ const Detail = () => {
           backgroundColor: COLORS.bg,
         }}>
           <Image source={background} style={styles.background} />
-          <HeaderTop />
+          
           <HeaderCenter />
           <HeaderBottom />
         </View> 
@@ -206,7 +214,7 @@ const Detail = () => {
         </View>
         
         </View>
-      </ScrollView>
+    </ScrollView>
   )
 }
 
@@ -219,7 +227,7 @@ const styles = StyleSheet.create({
   },
   background: { 
     width: width,
-    height: height*1.15,
+    height: height*1.17,
     resizeMode: 'cover',
     marginTop: -height*0.08,
     position: 'absolute',

@@ -23,5 +23,6 @@ export const SIZES = {
 export const PADDING = {
     ph : 48,
     pv : 54,
-    tab : 56
+    tab : 56,
+    nav : 24
 }
