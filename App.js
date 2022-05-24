@@ -4,14 +4,18 @@ import Home from '../figma/src/screens/Home'
 import { NavigationContainer } from '@react-navigation/native';
 import Navigation from './src/navigation/Navigation';
 import BottomTab from './src/navigation/BottomTab';
+import { store  } from './features/store/Store'
+import { Provider } from 'react-redux'
 
 
 const App = () => {
   return (
-    <NavigationContainer>
-      <BottomTab/>
-      {/* <Navigation/> */}
-    </NavigationContainer>
+    <Provider store={store}>
+      <NavigationContainer>
+        <BottomTab />
+        {/* <Navigation/> */}
+      </NavigationContainer>
+    </Provider>
   )
 }
 

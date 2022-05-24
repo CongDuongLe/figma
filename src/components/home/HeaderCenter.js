@@ -4,18 +4,19 @@ import {COLORS, FONTS, SIZES, PADDING} from '../../constant/constant'
 import AntDesign  from 'react-native-vector-icons/AntDesign';
 import mic from '../../../assets/images/mic.png'
 
-const HeaderCenter = () => {
+const HeaderCenter = ({search,setSearch}) => {
   return (
       <View style={styles.container}>
           <TouchableOpacity style={styles.searchIcon}>
             <AntDesign name="search1" size={SIZES.xxl} color={COLORS.ptext}
             />
           </TouchableOpacity>
-          <TextInput 
+          <TextInput
             placeholder="Search"
             placeholderTextColor={COLORS.stext}
             style={styles.searchInput}
-
+            onChangeText={(text)=>setSearch(text)}
+            value={search}
           />
           <TouchableOpacity style={styles.searchMic}>
             <Image source={mic} style={{ width :40, height :30}}/>
@@ -27,7 +28,7 @@ const HeaderCenter = () => {
 export default HeaderCenter
 
 const styles = StyleSheet.create({
-    container: { 
+    container: {
         flexDirection: 'row',
         marginTop : SIZES.xxxl,
         justifyContent: 'center',
@@ -38,7 +39,7 @@ const styles = StyleSheet.create({
         left : 16,
         paddingVertical: SIZES.lg,
     },
-    searchInput : { 
+    searchInput : {
         fontFamily: FONTS.medium,
         lineHeight :21,
         flex :1,
@@ -52,7 +53,7 @@ const styles = StyleSheet.create({
         paddingHorizontal: 56,
         justifyContent: 'center',
     },
-    searchMic : { 
+    searchMic : {
         position: 'absolute',
         right : 16,
     },

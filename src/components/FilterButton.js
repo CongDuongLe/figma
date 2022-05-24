@@ -1,14 +1,15 @@
 import { View, Text, Image, TouchableOpacity } from 'react-native'
-import React from 'react'
+import React, {useState} from 'react'
 import {
     COLORS,
     FONTS,
     SIZES,
     PADDING,
 } from '../constant/constant'
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
-const FilterButton = ({ name, source }) => {
+
+const FilterButton = ({onPress, name, source}) => {
+
     return (
         //   center view item and text
         <View style={{
@@ -17,7 +18,10 @@ const FilterButton = ({ name, source }) => {
             justifyContent: 'space-between',
         }}>
             {/* Icon or image */}
-            <TouchableOpacity style={{
+            <TouchableOpacity
+                // set current language to vi-VI
+                onPress={onPress}
+                style={{
                 height: 52,
                 width: 52,
                 borderRadius: 16,

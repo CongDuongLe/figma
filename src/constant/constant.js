@@ -26,3 +26,8 @@ export const PADDING = {
     tab : 56,
     nav : 24
 }
+
+export const LANGUAGES = {
+    vi : "vi-VI",
+    en : 'en-US'
+}
