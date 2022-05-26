@@ -1,12 +1,12 @@
-import { StyleSheet, Text, View, FlatList, TextInput, StatusBar, Image, Animated, TouchableOpacity, Dimensions,ScrollView, Platform
+import { StyleSheet, Text, View, FlatList, TextInput, StatusBar, Image, Animated, TouchableOpacity, Dimensions,ScrollView, Platform, ActivityIndicator
 } from 'react-native'
 import React,{useState, useRef, useEffect} from 'react'
 import {COLORS, FONTS, SIZES, PADDING, LANGUAGES} from '../constant/constant'
 import {useNavigation} from '@react-navigation/native'
 import Carousel from 'react-native-snap-carousel';
-import HeaderTop from '../components/home/HeaderTop'
-import HeaderCenter from '../components/home/HeaderCenter';
-import HeaderBottom from '../components/home/HeaderBottom';
+import GreetingUser from '../components/home/GreetingUser'
+import SearchField from '../components/home/SearchField';
+import FilmCategories from '../components/home/FilmCategories';
 import { useSelector, useDispatch } from 'react-redux'
 import axios from 'axios';
 import {
@@ -24,103 +24,80 @@ const Home = () => {
     const [movies, setMovies] = useState([]);
     const [search, setSearch] = useState('');
     const [filterMovies, setFilterMovies] = useState([]);
+    const [isLoading, setIsLoading] = useState(false);
 
-    const imageLink = 'https://image.tmdb.org/t/p/w500';
-
-
+    // constant
+    const imageLink = 'https://image.tmdb.org/t/p/w500/';
+    const API_KEY = "15e8ab20aaf5b4fcb9f30aa71d8abcde";
+    const BASE_URL = "https://api.themoviedb.org/3/movie";
     // useNavigation
     const navigation = useNavigation();
     // useSelector
-    const { currentLanguage, currentPage} = useSelector(state => state.film);
+    const { currentLanguage, currentPage,searchFilm,currentCategory} = useSelector(state => state.film);
     // useDispatch
     const dispatch = useDispatch();
 
-
     // get movies from API
     const getMovies = async () => {
-        const URL = `https://api.themoviedb.org/3/movie/popular?api_key=15e8ab20aaf5b4fcb9f30aa71d8abcde&language=${currentLanguage}&page=${currentPage}`;
+        setIsLoading(true);
+        const URL = `${BASE_URL}/${currentCategory}?api_key=${API_KEY}&language=${currentLanguage}&page=${currentPage}`;
         try {
             const response = await axios.get(URL);
             setMovies(response.data.results);
-
+            setFilterMovies(response.data.results);
+            setIsLoading(false);
         } catch (error) {
             console.log(error);
         }
     }
-
-    // next page
-    const nextPage = () => {
-        dispatch(changePage(currentPage + 1));
+    // dispatch nextPage to changePage
+    const nextPage = (page) => {
+        dispatch(changePage(page));
     }
 
-
+    // get movies from API when change language
     useEffect(() => {
         getMovies();
-    }, [currentLanguage, currentPage]);
+    }, [currentLanguage]);
 
-
-    // filter movies include search
+    // get movies from API when change page
     useEffect(() => {
-        const filter = movies.filter(movie => movie.title.toLowerCase().includes(search.toLowerCase()));
-        setFilterMovies(filter);
-    }, [search]);
+        // time out for prevent infinite loop
+        const timeout = setTimeout(() => {
+            getMovies();
+        }, 500);
+    }, [currentPage]);
 
 
-    // get data from api
-   /* const URL = 'https://imdb-api.com/en/API/MostPopularMovies/k_xlchixgs'
+    // search movies
 
-    const getFilms = async () => {
-        try {
-            const response = await axios.get(URL);
-            // api items.image to show image
-            setMovies(response.data.results);
 
-        } catch (error) {
-            console.log(error);
-        }
-    }
 
-    useEffect(() => {
-        getFilms();
-    }, []);*/
 
   // renderItem flatlist
   const renderItem = ({item, index}) => {
-    /*const inputRange = [
-      (index - 1) * ITEM_SIZE,
-      (index - 0) * ITEM_SIZE,
-      (index + 1) * ITEM_SIZE,
-    ];
-
-    const translateY = scrollX.interpolate({
-      inputRange,
-      outputRange: [15, 5, 15],
-      extrapolate: 'clamp',
-    });*/
-
     return (
-      // Touch to navigate to detail by id
-      <View
-        style={{
-          marginHorizontal: 16,
-          marginTop: 28,
-        }}>
-        <TouchableOpacity
-            // navigate to Detail with params
-
-          onPress={() => navigation.navigate('Detail', {
-              title : item.title,
-              image : imageLink + item.poster_path,
-              overview : item.overview,
-              release_date : item.release_date,
-              vote_average : item.vote_average,
-          })}>
-          <Image
-            source={{uri: imageLink + item.poster_path}}
-            style={{ width: 210, height: 310, borderRadius : 16, resizeMode: 'cover' }}
-          />
-        </TouchableOpacity>
-      </View>
+                <View
+                    style={{
+                        marginHorizontal: 16,
+                        marginTop: 28,
+                    }}>
+                    <TouchableOpacity
+                        // navigate to Detail with params
+                        onPress={() => navigation.navigate('Detail', {
+                            title: item.title,
+                            image: imageLink + item.poster_path,
+                            overview: item.overview,
+                            release_date: item.release_date,
+                            vote_average: item.vote_average,
+                            vote_count: item.vote_count,
+                        })}>
+                        <Image
+                            source={{uri: imageLink + item.poster_path}}
+                            style={{width: 210, height: 310, borderRadius: 16, resizeMode: 'cover'}}
+                        />
+                    </TouchableOpacity>
+                </View>
     );
   }
 
@@ -134,37 +111,16 @@ const Home = () => {
         <StatusBar barStyle="light-content" hidden={false} translucent={true} backgroundColor={'transparent'} />
         <View style={styles.header}>
           {/* HeaderTop */}
-          <HeaderTop />
+          <GreetingUser />
           {/* <HeaderCenter /> */}
-          <HeaderCenter
-            search={search}
+          <SearchField
+            search={searchFilm}
             setSearch={setSearch}
           />
-          {/* {HeaderCenter()} */}
-          <HeaderBottom
-          />
+          <FilmCategories/>
           {/* <HeaderBottom/> */}
         </View>
         <View style={styles.footer}>
-          {/* Animated Flatlist Rotated Z 5 dregree */}
-          {/* <Animated.FlatList
-          data={DATA}
-          keyExtractor={(item, index) => index.toString()}
-          renderItem={renderItem}
-          horizontal
-          showsHorizontalScrollIndicator={false}
-          bounces={false}
-          scrollEventThrottle={16}
-          contentContainerStyle={{ alignItems: 'center' }}
-          decelerationRate={Platform.OS === 'ios' ? 0 : 0.98}
-          renderToHardwareTextureAndroid
-          snapToInterval={ITEM_SIZE}
-          // snapToAlignment="center"
-          onScroll={Animated.event(
-            [{ nativeEvent: { contentOffset: { x: scrollX } } }],
-            { useNativeDriver: true }
-          )}
-        /> */}
           {/* Carousel */}
           <Carousel
             data={filterMovies.length === 0 ? movies : filterMovies}
@@ -173,11 +129,15 @@ const Home = () => {
             itemWidth={ITEM_SIZE}
             onSnapToItem={index => movies[index].title}
             layout={'default'}
-            loop={false}
+            loop={true}
             enableMomentum={true}
             activeSlideOffset={0}
             onEndReachedThreshold={0.5}
-            onEndReached={nextPage}
+            onEndReached={() => {
+              if (currentPage < 2) {
+                nextPage(currentPage + 1);
+              }
+            }}
           />
 
         </View>
@@ -203,5 +163,14 @@ const styles = StyleSheet.create({
   },
   footer: {
     flex: 1,
-  }
+  },
+    pageIndex: {
+        width: 16,
+        height: 16,
+        borderRadius: 8,
+        backgroundColor: COLORS.secondary,
+        marginHorizontal: 8,
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
 })

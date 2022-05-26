@@ -9,6 +9,9 @@ export const FONTS = {
     light: 'Poppins-Light',
     medium : 'Poppins-Medium',
     semibold : 'Poppins-SemiBold',
+    quickmd : 'Quicksand-Medium',
+    quickrg : 'Quicksand-Regular',
+    quicksb : 'Quicksand-SemiBold',
 }
 
 export const SIZES = {

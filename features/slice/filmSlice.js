@@ -2,9 +2,12 @@ import { createSlice } from "@reduxjs/toolkit"
 import {LANGUAGES} from '../../src/constant/constant'
 
 
+
 const initialState = {
-    currentLanguage : 'LANGUAGES.en',
+    currentLanguage : LANGUAGES.en,
     currentPage: 1,
+    searchFilm : '',
+    currentCategory: 'now_playing',
 }
 
 const filmSlice = createSlice(
@@ -20,6 +23,9 @@ const filmSlice = createSlice(
             changePage: (state, action) => {
                 state.currentPage = action.payload
             },
+            searchFilter: (state, action) => {
+                state.searchFilm = action.payload
+            },
 
         }
     }
@@ -27,5 +33,5 @@ const filmSlice = createSlice(
 
 export default filmSlice.reducer;
 // export actions
-export const { changeLanguage,changePage } = filmSlice.actions;
+export const { changeLanguage,changePage, searchFilter } = filmSlice.actions;
 

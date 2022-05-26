@@ -3,8 +3,20 @@ import React from 'react'
 import {COLORS, FONTS, SIZES, PADDING} from '../../constant/constant'
 import AntDesign  from 'react-native-vector-icons/AntDesign';
 import mic from '../../../assets/images/mic.png'
+import { useDispatch, useSelector } from 'react-redux'
+import {  searchFilter } from '../../../features/slice/filmSlice'
 
-const HeaderCenter = ({search,setSearch}) => {
+const SearchField = ({search,setSearch}) => {
+
+    const {searchFilm} = useSelector(state => state.film)
+
+    const dispatch = useDispatch()
+    const onSearch = (search) => {
+        setSearch(search)
+        dispatch(searchFilter(search))
+    }
+
+
   return (
       <View style={styles.container}>
           <TouchableOpacity style={styles.searchIcon}>
@@ -15,7 +27,7 @@ const HeaderCenter = ({search,setSearch}) => {
             placeholder="Search"
             placeholderTextColor={COLORS.stext}
             style={styles.searchInput}
-            onChangeText={(text)=>setSearch(text)}
+            onChangeText={onSearch}
             value={search}
           />
           <TouchableOpacity style={styles.searchMic}>
@@ -25,7 +37,7 @@ const HeaderCenter = ({search,setSearch}) => {
   )
 }
 
-export default HeaderCenter
+export default SearchField
 
 const styles = StyleSheet.create({
     container: {

@@ -12,7 +12,7 @@ import {
 } from '../../../features/slice/filmSlice'
 
 
-const HeaderBottom = () => {
+const FilmCategories = () => {
 
 
     //use dispatch
@@ -44,7 +44,7 @@ const HeaderBottom = () => {
   )
 }
 
-export default HeaderBottom
+export default FilmCategories
 
 const styles = StyleSheet.create({
   container: {

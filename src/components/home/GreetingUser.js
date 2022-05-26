@@ -4,7 +4,7 @@ import { StyleSheet, Text, View, FlatList, TextInput, StatusBar, Image, Animated
 } from 'react-native'
 import avatar from '../../../assets/images/avatar.png'
 
-const HeaderTop = () => {
+const GreetingUser = () => {
     return (
       <View style={styles.container}>
         {/* Text */}
@@ -25,10 +25,10 @@ const HeaderTop = () => {
     )
   }
 
-export default HeaderTop
+export default GreetingUser
 
 const styles = StyleSheet.create({
-    container: { 
+    container: {
         flexDirection: 'row',
         justifyContent: 'space-between',
     },

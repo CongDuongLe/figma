@@ -16,6 +16,8 @@ const height = Dimensions.get('window').height;
 
 const Detail = (params) => {
 
+  const [nowPlaying, setNowPlaying] = useState([]);
+
   // useRoute()
 
   const route = useRoute()
@@ -90,57 +92,6 @@ const Detail = (params) => {
       </View>
     )
   }
-  // headerBottom
-
- /* const HeaderBottom = () => {
-    return (
-      <View style={{
-        zIndex: 100,
-        justifyContent: 'center',
-        alignItems: 'center',
-        top: (height/5)*2+20,
-        paddingHorizontal: PADDING.ph,
-      }}>
-        <Text style={{
-          fontFamily: FONTS.semibold,
-          fontSize: SIZES.xxl,
-          color: COLORS.ptext,
-          lineHeight: SIZES.xxxl,
-          textAlign: 'center'
-
-        }}>{fullTitle}</Text>
-          <Text style={{
-            fontFamily: FONTS.medium,
-            fontSize: SIZES.lg,
-            color: COLORS.stext,
-            lineHeight: SIZES.xl,
-            marginTop: 8,
-            textAlign: 'center',
-          }}>
-            {crew}
-          </Text>
-        <TouchableOpacity
-          activeOpacity={0.8}
-          style={{
-            zIndex: 100,
-          }}>
-         {/!* <Image source={rating} style={{
-            width: 144,
-            height: 24,
-          }} />*!/}
-          <Text
-            style={{
-                fontFamily: FONTS.semibold,
-                fontSize: SIZES.lg,
-                color: COLORS.stext,
-                textAlign: 'center',
-                lineHeight: SIZES.xxxl,
-            }}>
-              Rank : {rank}</Text>
-        </TouchableOpacity>
-        </View>
-      )
-    }*/
 
   // renderItem
   const renderItem = ({item, index}) => {

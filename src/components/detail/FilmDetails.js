@@ -13,7 +13,7 @@ const {width,height} = Dimensions.get('window')
 const FilmDetails = (params) => {
     const route = useRoute();
 
-    const {fullTitle, rank,image, title, release_date, vote_average} = route.params;
+    const {fullTitle, rank,image, title, release_date, vote_average, vote_count} = route.params;
 
     return (
         <View style={{
@@ -60,7 +60,7 @@ const FilmDetails = (params) => {
                         textAlign: 'center',
                         lineHeight: SIZES.xxxl,
                     }}>
-                    Vote Average : {vote_average}  ⭐</Text>
+                    Vote Average : {vote_average}/10 ({vote_count} votes)</Text>
             </TouchableOpacity>
         </View>
     )

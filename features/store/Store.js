@@ -1,19 +1,16 @@
 import { configureStore } from '@reduxjs/toolkit';
 import filmReducer from '../slice/filmSlice';
+import authReducer from '../slice/authSlice';
 import { setupListeners } from '@reduxjs/toolkit/query'
-import {
-    filmAPI
-} from '../slice/buttonSlice';
+
 
 // create store instance
 export const store = configureStore({
     reducer: {
-        [filmAPI.reducerPath]: filmAPI.reducer,
         film : filmReducer,
+        auth : authReducer,
 
      },
 
-    middleware: (getDefaultMiddleware) =>
-        getDefaultMiddleware().concat(filmAPI.middleware),
 
 })
